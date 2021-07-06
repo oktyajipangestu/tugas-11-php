@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
+use App\tbl_karyawan;
 
 class Karyawan extends Controller
 {
@@ -19,5 +20,33 @@ class Karyawan extends Controller
             $res['message'] = "Empty!";
             return response($res);
         }
+    }
+
+
+    public function store(Request $request) {
+        $this->validate($request, [
+            'file' => 'required|max:2048'
+        ]);
+
+        $file = $request->file('file');
+        $nama_file = time()."_".$file->getClientOriginalName();
+
+        $tujuan_upload = 'data_file';
+
+        if($file->move($tujuan_upload,$nama_file)){
+            $data = tbl_karyawan::create(
+                [
+                    'nama' => $request->nama,
+                    'jabatan' => $request->jabatan,
+                    'umur' => $request->umur,
+                    'alamat' => $request->alamat,
+                    'foto' => $nama_file
+                ]
+            );
+            $res['message'] = 'success !';
+            $res['values'] = $data;
+            return response($res);
+        }
+
     }
 }
