@@ -94,4 +94,21 @@ class Karyawan extends Controller
             }
         }
     }
+
+
+    public function delete($id) {
+        $data = DB::table('tbl_karyawan')->where('id',$id)->get();
+        foreach( $data as $karyawan) {
+            if(file_exists(public_path('data_file/'.$karyawan->gambar))) {
+                @unlink(public_path('data_file/'.$karyawan->gamber));
+                DB::table('tbl_karyawan')->where('id', $id)->delete();
+                $res['message'] = "success!";
+                return response($res);
+            } else {
+                $res['message'] = "Empty !";
+                return response($res);
+            }
+
+        }
+    }
 }

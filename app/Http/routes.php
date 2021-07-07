@@ -18,3 +18,4 @@ Route::get('/', function () {
 Route::get('/getData', 'Karyawan@getData');
 Route::post('/pushData', 'Karyawan@store');
 Route::post('/setData', 'Karyawan@update');
+Route::get('/hapusData', 'Karyawan@delete');
