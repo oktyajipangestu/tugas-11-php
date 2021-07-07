@@ -18,4 +18,5 @@ Route::get('/', function () {
 Route::get('/getData', 'Karyawan@getData');
 Route::post('/pushData', 'Karyawan@store');
 Route::post('/setData', 'Karyawan@update');
-Route::get('/hapusData', 'Karyawan@delete');
+Route::get('/hapusData/{id}', 'Karyawan@delete');
+Route::get('/detail/{id}', 'Karyawan@getDetail');
