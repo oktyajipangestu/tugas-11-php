@@ -49,4 +49,49 @@ class Karyawan extends Controller
         }
 
     }
+
+
+    public function update(Request $request) {
+        if(!empty($request->file)){
+            $this->validate($request, [
+                'file' => 'required|max:2028'
+            ]);
+
+            $file = $request->file('file');
+            $nama_file = time()."_".$file->getClientOriginalName();
+
+            $tujuan_upload = 'data_file';
+
+            $file->move($tujuan_upload,$nama_file);
+            $data = DB::table('tbl_karyawan')->where('id',$request->id)->get();
+
+            foreach($data as $karyawan) {
+                @unlink(public_path('data_file/'.$karyawan->gamber));
+                $ket = DB::table('tbl_karyawan')->where('id',$request->id)->update([
+                    'nama' => $request->nama,
+                    'jabatan' => $request->jabatan,
+                    'umur' => $request->umur,
+                    'alamat' => $request->alamat,
+                    'foto' => $nama_file
+                ]);
+                $res['message'] = 'success !';
+                $res['values'] = $ket;
+                return response($res);
+            }
+        } else {
+            $data = DB::table('tbl_karyawan')->where('id',$request->id)->get();
+
+            foreach($data as $karyawan) {
+                $ket = DB::table('tbl_karyawan')->where('id',$request->id)->update([
+                    'nama' => $request->nama,
+                    'jabatan' => $request->jabatan,
+                    'umur' => $request->umur,
+                    'alamat' => $request->alamat
+                ]);
+                $res['message'] = 'success !';
+                $res['values'] = $ket;
+                return response($res);
+            }
+        }
+    }
 }
